@@ -6,7 +6,7 @@ The console is a command interpreter to manage objects abstraction between objec
 
 The console will perform the following tasks:
 
-create a new object
-retrive an object from a file
-do operations on objects
-destroy an object
+create a new object,
+retrive an object from a file,
+do operations on objects,
+destroy an object.
