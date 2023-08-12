@@ -50,29 +50,6 @@ class TestUser_instantiation(unittest.TestCase):
         us2 = User()
         self.assertLess(us1.created_at, us2.created_at)
 
-    def test_two_saves(self):
-        us = User()
-        sleep(0.05)
-        first_updated_at = us.updated_at
-        us.save()
-        second_updated_at = us.updated_at
-        self.assertLess(first_updated_at, second_updated_at)
-        sleep(0.05)
-        us.save()
-        self.assertLess(second_updated_at, us.updated_at)
-
-    def test_save_with_arg(self):
-        us = User()
-        with self.assertRaises(TypeError):
-            us.save(None)
-
-    def test_save_updates_file(self):
-        us = User()
-        us.save()
-        usid = "User." + us.id
-        with open("file.json", "r") as f:
-            self.assertIn(usid, f.read())
-
     def test_two_users_different_updated_at(self):
         us1 = User()
         sleep(0.05)
@@ -106,36 +83,7 @@ class TestUser_instantiation(unittest.TestCase):
     def test_instantiation_with_None_kwargs(self):
         with self.assertRaises(TypeError):
             User(id=None, created_at=None, updated_at=None)
-
-
-class TestUser_save(unittest.TestCase):
-    """Unittests for testing save method of the  class."""
-
-    @classmethod
-    def setUp(self):
-        try:
-            os.rename("file.json", "tmp")
-        except IOError:
-            pass
-
-    def tearDown(self):
-        try:
-            os.remove("file.json")
-        except IOError:
-            pass
-        try:
-            os.rename("tmp", "file.json")
-        except IOError:
-            pass
-
-    def test_one_save(self):
-        us = User()
-        sleep(0.05)
-        first_updated_at = us.updated_at
-        us.save()
-        self.assertLess(first_updated_at, us.updated_at)
-
-    class TestUser_to_dict(unittest.TestCase):
+class TestUser_to_dict(unittest.TestCase):
     """Unittests for testing to_dict method of the User class."""
 
     def test_to_dict_type(self):
@@ -184,6 +132,54 @@ class TestUser_save(unittest.TestCase):
         with self.assertRaises(TypeError):
             us.to_dict(None)
 
+class TestUser_save(unittest.TestCase):
+    """Unittests for testing save method of the  class."""
 
+    @classmethod
+    def setUp(self):
+        try:
+            os.rename("file.json", "tmp")
+        except IOError:
+            pass
+
+    def tearDown(self):
+        try:
+            os.remove("file.json")
+        except IOError:
+            pass
+        try:
+            os.rename("tmp", "file.json")
+        except IOError:
+            pass
+
+    def test_one_save(self):
+        us = User()
+        sleep(0.05)
+        first_updated_at = us.updated_at
+        us.save()
+        self.assertLess(first_updated_at, us.updated_at)
+
+    def test_two_saves(self):
+        us = User()
+        sleep(0.05)
+        first_updated_at = us.updated_at
+        us.save()
+        second_updated_at = us.updated_at
+        self.assertLess(first_updated_at, second_updated_at)
+        sleep(0.05)
+        us.save()
+        self.assertLess(second_updated_at, us.updated_at)
+
+    def test_save_with_arg(self):
+        us = User()
+        with self.assertRaises(TypeError):
+            us.save(None)
+
+    def test_save_updates_file(self):
+        us = User()
+        us.save()
+        usid = "User." + us.id
+        with open("file.json", "r") as f:
+            self.assertIn(usid, f.read())
 if __name__ == "__main__":
     unittest.main()
